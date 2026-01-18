@@ -591,8 +591,17 @@ section {
     color: var(--text-secondary);
 }
 
+.project-expandable {
+    position: relative;
+}
+
 .project-features {
     margin-bottom: 24px;
+}
+
+/* Hide Read More button on desktop */
+.read-more-btn {
+    display: none;
 }
 
 .feature-item {
@@ -1287,8 +1296,20 @@ section {
         border-color: var(--primary-color);
     }
 
-    /* Features List */
+    /* Expandable Content */
+    .project-expandable {
+        position: relative;
+    }
+
     .project-features {
+        margin-bottom: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+    }
+
+    .project-features.expanded {
+        max-height: 1000px;
         margin-bottom: 20px;
     }
 
@@ -1300,7 +1321,22 @@ section {
         font-size: 14px;
         color: var(--text-secondary);
         line-height: 1.6;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
     }
+
+    .project-features.expanded .feature-item {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .feature-item:nth-child(1) { transition-delay: 0.05s; }
+    .feature-item:nth-child(2) { transition-delay: 0.1s; }
+    .feature-item:nth-child(3) { transition-delay: 0.15s; }
+    .feature-item:nth-child(4) { transition-delay: 0.2s; }
+    .feature-item:nth-child(5) { transition-delay: 0.25s; }
+    .feature-item:nth-child(6) { transition-delay: 0.3s; }
 
     .feature-item:last-child {
         border-bottom: none;
@@ -1311,6 +1347,41 @@ section {
         font-size: 16px;
         margin-top: 2px;
         flex-shrink: 0;
+    }
+
+    /* Read More Button - Mobile Only */
+    .read-more-btn {
+        width: 100%;
+        padding: 14px 20px;
+        background: rgba(99, 102, 241, 0.1);
+        border: 2px solid rgba(99, 102, 241, 0.3);
+        border-radius: 12px;
+        color: var(--primary-color);
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        margin-top: 16px;
+    }
+
+    .read-more-btn:active {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: var(--primary-color);
+        transform: scale(0.98);
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .read-more-btn .read-more-icon {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .read-more-btn.expanded .read-more-icon {
+        transform: rotate(180deg);
     }
 
     /* Project Links */

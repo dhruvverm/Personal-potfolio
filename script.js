@@ -320,4 +320,33 @@ if (contactForm) {
     });
 }
 
+// Read More/Read Less Toggle for Project Features
+function toggleProject(button) {
+    const expandable = button.closest('.project-expandable');
+    const features = expandable.querySelector('.project-features');
+    const readMoreText = button.querySelector('.read-more-text');
+    const readLessText = button.querySelector('.read-less-text');
+    
+    const isExpanded = features.classList.contains('expanded');
+    
+    if (isExpanded) {
+        // Collapse
+        features.classList.remove('expanded');
+        button.classList.remove('expanded');
+        readMoreText.style.display = 'inline';
+        readLessText.style.display = 'none';
+    } else {
+        // Expand
+        features.classList.add('expanded');
+        button.classList.add('expanded');
+        readMoreText.style.display = 'none';
+        readLessText.style.display = 'inline';
+        
+        // Scroll to show more content smoothly
+        setTimeout(() => {
+            button.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
+    }
+}
+
 console.log('Portfolio website loaded successfully! 🚀');
