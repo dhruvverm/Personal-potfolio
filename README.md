@@ -79,7 +79,23 @@ The server will run on `http://localhost:3000`
 
 - **WhatsApp Button**: Direct link to WhatsApp (+91 8076616747)
 - **Email**: dhruvverma5704@gmail.com
-- **Contact Form**: Submissions are saved to `contact-submissions.json` and viewable in the dashboard
+- **Contact Form**: 
+  - **Local**: Submissions saved to `contact-submissions.json` and viewable in dashboard
+  - **Vercel**: Submissions sent via email notification (requires Resend API key)
+
+### Email Notifications (Vercel Deployment)
+
+To receive email notifications when someone submits the form on your Vercel site:
+
+1. **Sign up for Resend** (free tier available): https://resend.com
+2. **Get your API key** from the Resend dashboard
+3. **Add to Vercel Environment Variables**:
+   - Go to your Vercel project settings
+   - Navigate to "Environment Variables"
+   - Add: `RESEND_API_KEY` = `your_api_key_here`
+   - Redeploy your site
+
+After setup, all form submissions from your Vercel site will be emailed to `dhruvverma5704@gmail.com`.
 
 ### API Endpoints
 

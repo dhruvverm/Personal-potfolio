@@ -42,24 +42,58 @@ export default async function handler(req, res) {
             timestamp: timestamp || new Date().toISOString()
         };
 
-        // Log submission (in production, send email or store in database)
+        // Log submission
         console.log('New contact form submission:', submission);
 
-        // TODO: Add email sending service here
-        // Example with Resend:
-        // await fetch('https://api.resend.com/emails', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         from: 'portfolio@yourdomain.com',
-        //         to: 'dhruvverma5704@gmail.com',
-        //         subject: `New Contact: ${subject}`,
-        //         html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Subject:</strong> ${subject}</p><p><strong>Message:</strong> ${message}</p>`
-        //     })
-        // });
+        // Send email notification using Resend API
+        // Get API key from environment variable: RESEND_API_KEY
+        if (process.env.RESEND_API_KEY) {
+            try {
+                const emailResponse = await fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from: 'Portfolio Contact <onboarding@resend.dev>', // Update this with your verified domain
+                        to: 'dhruvverma5704@gmail.com',
+                        reply_to: email,
+                        subject: `New Contact Form Submission: ${subject}`,
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                                <h2 style="color: #6366f1;">New Contact Form Submission</h2>
+                                <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                                    <p><strong>Name:</strong> ${name}</p>
+                                    <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                                    <p><strong>Subject:</strong> ${subject}</p>
+                                    <p><strong>Submitted:</strong> ${new Date(submission.timestamp).toLocaleString()}</p>
+                                </div>
+                                <div style="background: #ffffff; padding: 20px; border-left: 4px solid #6366f1; margin: 20px 0;">
+                                    <h3 style="margin-top: 0;">Message:</h3>
+                                    <p style="white-space: pre-wrap;">${message}</p>
+                                </div>
+                                <p style="color: #666; font-size: 12px; margin-top: 30px;">
+                                    This email was sent from your portfolio contact form.
+                                </p>
+                            </div>
+                        `
+                    })
+                });
+
+                if (!emailResponse.ok) {
+                    const errorData = await emailResponse.json();
+                    console.error('Resend API error:', errorData);
+                } else {
+                    console.log('Email notification sent successfully');
+                }
+            } catch (emailError) {
+                console.error('Error sending email:', emailError);
+                // Don't fail the request if email fails
+            }
+        } else {
+            console.log('RESEND_API_KEY not set - skipping email notification');
+        }
 
         return res.status(200).json({ 
             success: true, 
