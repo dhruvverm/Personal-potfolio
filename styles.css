@@ -1163,18 +1163,25 @@ section {
         opacity: 0.9;
     }
 
-    /* Clean Mobile Project Cards - Simple & Modern */
+    /* Fresh Mobile Project Section Design */
+    .projects .container {
+        padding: 0;
+    }
+
     .project-card {
         grid-template-columns: 1fr;
         gap: 0;
         padding: 0;
-        background: var(--bg-card);
-        border: 2px solid rgba(99, 102, 241, 0.2);
-        border-radius: 20px;
-        overflow: hidden;
-        margin-bottom: 32px;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        overflow: visible;
+        margin-bottom: 56px;
         position: relative;
-        transition: all 0.3s ease;
+    }
+
+    .project-card::before {
+        display: none;
     }
 
     .project-card:nth-child(even) .project-image {
@@ -1185,34 +1192,31 @@ section {
         order: 2;
     }
 
-    .project-card:active {
-        transform: translateY(-4px);
-        border-color: var(--primary-color);
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
-    }
-
-    .project-card::before {
-        display: none;
-    }
-
-    /* Project Image */
+    /* Project Image - Hero Style */
     .project-image {
         width: 100%;
         position: relative;
+        margin-bottom: 24px;
+        border-radius: 20px;
+        overflow: hidden;
+        aspect-ratio: 4 / 3;
+        background: var(--bg-card);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     }
 
     .project-image-placeholder {
-        min-height: 200px;
-        font-size: 64px;
+        width: 100%;
+        height: 100%;
+        min-height: 260px;
+        font-size: 80px;
         position: relative;
-        border-radius: 18px 18px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
     }
 
-    .project-image-placeholder::after {
-        display: none;
-    }
-
-    /* Project Badge */
+    /* Badge - Top Left */
     .project-badge {
         position: absolute;
         top: 16px;
@@ -1223,25 +1227,28 @@ section {
         color: white;
         font-weight: 700;
         font-size: 11px;
-        border-radius: 20px;
+        border-radius: 25px;
         z-index: 10;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
     }
 
     .project-badge.primary {
         background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%);
+        box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
     }
 
     .project-badge.secondary {
         background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
     }
 
-    /* Project Content */
+    /* Project Content - Clean & Spacious */
     .project-content {
-        background: var(--bg-card);
-        padding: 24px 20px;
-        border-top: 1px solid rgba(99, 102, 241, 0.1);
+        background: transparent;
+        padding: 0;
+        border: none;
     }
 
     .project-content::before {
@@ -1249,50 +1256,45 @@ section {
     }
 
     .project-title {
-        font-size: 28px;
-        margin-bottom: 12px;
+        font-size: 36px;
+        margin-bottom: 18px;
         margin-top: 0;
         color: var(--text-primary);
         font-weight: 800;
         line-height: 1.2;
-    }
-
-    .project-title.highlight {
-        background: none;
-        -webkit-text-fill-color: initial;
+        letter-spacing: -1px;
     }
 
     .project-description {
-        font-size: 15px;
-        line-height: 1.7;
-        margin-bottom: 20px;
+        font-size: 17px;
+        line-height: 1.8;
+        margin-bottom: 28px;
         color: var(--text-secondary);
     }
 
-    /* Technology Tags */
+    /* Tech Tags - Clean Pills */
     .project-tech {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 20px;
-        padding: 16px 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        gap: 10px;
+        margin-bottom: 28px;
+        padding: 0;
+        border: none;
     }
 
     .tech-tag {
-        padding: 6px 12px;
-        background: rgba(99, 102, 241, 0.1);
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        font-size: 11px;
+        padding: 10px 16px;
+        background: rgba(99, 102, 241, 0.08);
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        font-size: 13px;
         font-weight: 600;
-        border-radius: 8px;
+        border-radius: 25px;
         color: var(--primary-color);
         transition: all 0.2s ease;
     }
 
     .tech-tag:active {
-        background: rgba(99, 102, 241, 0.2);
+        background: rgba(99, 102, 241, 0.15);
         border-color: var(--primary-color);
     }
 
