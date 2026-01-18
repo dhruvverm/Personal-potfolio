@@ -623,6 +623,21 @@ section {
     color: var(--text-primary);
 }
 
+.project-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.project-link:hover {
+    color: var(--primary-color);
+}
+
+.project-link strong {
+    transition: color 0.3s ease;
+}
+
 /* Contact Section */
 .contact {
     background: var(--bg-darker);
