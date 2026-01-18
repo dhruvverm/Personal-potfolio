@@ -1163,11 +1163,7 @@ section {
         opacity: 0.9;
     }
 
-    /* Fresh Mobile Project Section Design */
-    .projects .container {
-        padding: 0;
-    }
-
+    /* Clean Mobile Project Section Design */
     .project-card {
         grid-template-columns: 1fr;
         gap: 0;
@@ -1176,41 +1172,36 @@ section {
         border: none;
         border-radius: 0;
         overflow: visible;
-        margin-bottom: 56px;
+        margin-bottom: 60px;
         position: relative;
+    }
+
+    .project-card:nth-child(even) {
+        grid-template-columns: 1fr;
     }
 
     .project-card::before {
         display: none;
     }
 
-    .project-card:nth-child(even) .project-image {
-        order: 1;
-    }
-
-    .project-card:nth-child(even) .project-content {
-        order: 2;
-    }
-
     /* Hide Project Images on Mobile */
     .project-image {
-        display: none;
+        display: none !important;
     }
 
     .project-card:nth-child(even) .project-image {
-        order: 1;
-        display: none;
+        display: none !important;
     }
 
     .project-card:nth-child(even) .project-content {
-        order: 2;
+        order: 1;
     }
 
-    /* Badge - Top Left */
+    /* Badge - Inline Position Since Images Hidden */
     .project-badge {
-        position: absolute;
-        top: 16px;
-        left: 16px;
+        position: static;
+        display: inline-block;
+        margin-bottom: 16px;
         padding: 8px 16px;
         background: var(--gradient-1);
         border: none;
@@ -1218,7 +1209,6 @@ section {
         font-weight: 700;
         font-size: 11px;
         border-radius: 25px;
-        z-index: 10;
         text-transform: uppercase;
         letter-spacing: 1px;
         box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
