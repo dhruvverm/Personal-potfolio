@@ -288,7 +288,15 @@ if (contactForm) {
         } catch (error) {
             // Error handling
             console.error('Form submission error:', error);
-            formMessage.textContent = 'Sorry, there was an error sending your message. Please try again or contact me directly via email/WhatsApp.';
+            
+            // Check if backend is running
+            let errorMessage = 'Sorry, there was an error sending your message. ';
+            if (error.message.includes('fetch') || error.message.includes('Failed to fetch')) {
+                errorMessage += 'Make sure the backend server is running (npm start). ';
+            }
+            errorMessage += 'Please try again or contact me directly via email/WhatsApp.';
+            
+            formMessage.textContent = errorMessage;
             formMessage.className = 'form-message error';
             formMessage.style.display = 'block';
         } finally {
