@@ -1,5 +1,4 @@
-// Vercel Serverless Function to get all submissions
-// This requires Vercel KV or a database to work properly
+// Vercel Serverless Function to get all submissions from Vercel KV
 
 export default async function handler(req, res) {
     // Set CORS headers
@@ -18,14 +17,26 @@ export default async function handler(req, res) {
     }
 
     try {
-        // TODO: Replace with actual database/KV storage
-        // For now, return empty array since we need persistent storage
-        // To fix this, you can:
-        // 1. Use Vercel KV: https://vercel.com/docs/storage/vercel-kv
-        // 2. Use a database like MongoDB, PostgreSQL, or Supabase
-        // 3. Use an external API service
-        
-        return res.status(200).json([]);
+        let submissions = [];
+
+        // Fetch from Vercel KV
+        if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+            const kvResponse = await fetch(`${process.env.KV_REST_API_URL}/get/submissions`, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`
+                }
+            });
+
+            if (kvResponse.ok) {
+                const data = await kvResponse.json();
+                if (data.result !== null) {
+                    submissions = JSON.parse(data.result);
+                }
+            }
+        }
+
+        // Return submissions in reverse order (latest first)
+        return res.status(200).json(submissions.reverse());
     } catch (error) {
         console.error('Error fetching submissions:', error);
         return res.status(500).json({ error: 'Failed to fetch submissions' });

@@ -1,13 +1,7 @@
 {
   "functions": {
-    "api/contact.js": {
+    "api/**/*.js": {
       "maxDuration": 10
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/contact",
-      "destination": "/api/contact.js"
-    }
-  ]
+  }
 }

@@ -81,11 +81,36 @@ The server will run on `http://localhost:3000`
 - **Email**: dhruvverma5704@gmail.com
 - **Contact Form**: 
   - **Local**: Submissions saved to `contact-submissions.json` and viewable in dashboard
-  - **Vercel**: Submissions sent via email notification (requires Resend API key)
+  - **Vercel**: Submissions stored in Vercel KV and viewable in dashboard at `/dashboard`
 
-### Email Notifications (Vercel Deployment)
+### Vercel KV Setup (Required for Dashboard on Vercel)
 
-To receive email notifications when someone submits the form on your Vercel site:
+To enable the dashboard on your Vercel deployment:
+
+1. **Create Vercel KV Database**:
+   - Go to your Vercel project dashboard
+   - Navigate to "Storage" tab
+   - Click "Create Database" → Select "KV"
+   - Give it a name (e.g., "portfolio-kv")
+   - Click "Create"
+
+2. **Get Environment Variables**:
+   - After creating KV, Vercel automatically provides:
+     - `KV_REST_API_URL`
+     - `KV_REST_API_TOKEN`
+   - These are automatically added to your project
+
+3. **Redeploy**:
+   - Vercel will automatically redeploy with the new environment variables
+   - Or manually trigger a redeploy from the dashboard
+
+4. **Access Dashboard**:
+   - Visit: `https://your-site.vercel.app/dashboard`
+   - All form submissions will be stored and visible here
+
+### Email Notifications (Optional)
+
+To also receive email notifications when someone submits the form:
 
 1. **Sign up for Resend** (free tier available): https://resend.com
 2. **Get your API key** from the Resend dashboard
@@ -95,7 +120,9 @@ To receive email notifications when someone submits the form on your Vercel site
    - Add: `RESEND_API_KEY` = `your_api_key_here`
    - Redeploy your site
 
-After setup, all form submissions from your Vercel site will be emailed to `dhruvverma5704@gmail.com`.
+After setup, all form submissions will be:
+- Stored in Vercel KV (visible in dashboard)
+- Emailed to `dhruvverma5704@gmail.com` (if Resend is configured)
 
 ### API Endpoints
 

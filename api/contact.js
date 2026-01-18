@@ -39,11 +39,56 @@ export default async function handler(req, res) {
             email,
             subject,
             message,
-            timestamp: timestamp || new Date().toISOString()
+            timestamp: timestamp || new Date().toISOString(),
+            read: false
         };
 
         // Log submission
         console.log('New contact form submission:', submission);
+
+        // Store submission in Vercel KV using REST API
+        if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+            try {
+                // Get existing submissions using KV REST API
+                const getResponse = await fetch(`${process.env.KV_REST_API_URL}/get/submissions`, {
+                    headers: {
+                        'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`
+                    }
+                });
+
+                let submissions = [];
+                if (getResponse.ok) {
+                    const data = await getResponse.json();
+                    if (data.result !== null) {
+                        submissions = JSON.parse(data.result);
+                    }
+                }
+
+                // Add new submission
+                submissions.push(submission);
+
+                // Save back to KV
+                const setResponse = await fetch(`${process.env.KV_REST_API_URL}/set/submissions`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(submissions)
+                });
+
+                if (setResponse.ok) {
+                    console.log('Submission stored in Vercel KV');
+                } else {
+                    console.error('Failed to store in KV:', await setResponse.text());
+                }
+            } catch (kvError) {
+                console.error('Error storing in Vercel KV:', kvError);
+                // Don't fail the request if KV fails
+            }
+        } else {
+            console.log('Vercel KV not configured - skipping storage');
+        }
 
         // Send email notification using Resend API
         // Get API key from environment variable: RESEND_API_KEY
