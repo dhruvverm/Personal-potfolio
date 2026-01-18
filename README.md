@@ -52,14 +52,54 @@ Then visit: `http://localhost:8000`
 ### Option 3: Live Server (VS Code Extension)
 If you're using VS Code, install the "Live Server" extension and click "Go Live" in the status bar.
 
+## Contact Form & Backend
+
+The portfolio includes a contact form that sends submissions to your backend dashboard.
+
+### Setting Up the Backend
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the server:
+```bash
+npm start
+```
+
+The server will run on `http://localhost:3000`
+
+3. View submissions:
+- Visit `http://localhost:3000/dashboard` to see all contact form submissions
+- The dashboard shows total submissions, unread count, and today's submissions
+- You can mark submissions as read or delete them
+
+### Contact Features
+
+- **WhatsApp Button**: Direct link to WhatsApp (+91 8076616747)
+- **Email**: dhruvverma5704@gmail.com
+- **Contact Form**: Submissions are saved to `contact-submissions.json` and viewable in the dashboard
+
+### API Endpoints
+
+- `POST /api/contact` - Submit contact form
+- `GET /api/submissions` - Get all submissions (for dashboard)
+- `PUT /api/submissions/:id/read` - Mark submission as read
+- `DELETE /api/submissions/:id` - Delete submission
+
 ## File Structure
 
 ```
 Portfolio/
-├── index.html      # Main HTML structure
-├── styles.css      # All styling and animations
-├── script.js       # Interactive functionality
-└── README.md       # This file
+├── index.html              # Main HTML structure
+├── styles.css              # All styling and animations
+├── script.js               # Interactive functionality
+├── server.js               # Backend API server
+├── dashboard.html          # Admin dashboard for submissions
+├── package.json            # Node.js dependencies
+├── contact-submissions.json # Form submissions data (auto-generated)
+└── README.md               # This file
 ```
 
 ## Customization
@@ -92,10 +132,20 @@ Add your social media links in the footer or contact section.
 
 ## Performance
 
-- Lightweight (~50KB total)
-- No external dependencies (except Google Fonts and Font Awesome)
+- Lightweight frontend (~50KB total)
 - Optimized animations using CSS transforms
 - Debounced scroll events for smooth performance
+- Backend uses Express.js for fast API responses
+
+## Requirements
+
+### Frontend Only
+- Just a web browser (no dependencies needed)
+- Works with any static file server
+
+### Backend (for contact form)
+- Node.js 14+ 
+- npm or yarn
 
 ## License
 

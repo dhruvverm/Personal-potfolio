@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Submissions - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1f1f2e;
+        }
+
+        .dashboard-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #4f46e5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #111118;
+            border: 1px solid #1f1f2e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #a0a0b0;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .submissions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .submission-card {
+            background: #111118;
+            border: 1px solid #1f1f2e;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .submission-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .submission-card.unread {
+            border-color: #6366f1;
+            border-width: 2px;
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .submission-info h3 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .submission-info p {
+            font-size: 14px;
+            color: #a0a0b0;
+        }
+
+        .submission-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mark-read-btn {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .mark-read-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .submission-subject {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .submission-message {
+            font-size: 14px;
+            color: #a0a0b0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+        }
+
+        .submission-timestamp {
+            font-size: 12px;
+            color: #6b6b7f;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0a0b0;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #a0a0b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-inbox"></i> Contact Form Submissions</h1>
+            <button class="refresh-btn" onclick="loadSubmissions()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <h3>Total Submissions</h3>
+                <div class="value" id="totalCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Unread</h3>
+                <div class="value" id="unreadCount">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Today</h3>
+                <div class="value" id="todayCount">0</div>
+            </div>
+        </div>
+
+        <div class="submissions-list" id="submissionsList">
+            <div class="loading">Loading submissions...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+
+        async function loadSubmissions() {
+            try {
+                const response = await fetch(`${API_URL}/api/submissions`);
+                const submissions = await response.json();
+                
+                displaySubmissions(submissions);
+                updateStats(submissions);
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+                document.getElementById('submissionsList').innerHTML = 
+                    '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading submissions. Please try again.</p></div>';
+            }
+        }
+
+        function displaySubmissions(submissions) {
+            const list = document.getElementById('submissionsList');
+            
+            if (submissions.length === 0) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No submissions yet.</p></div>';
+                return;
+            }
+
+            list.innerHTML = submissions.map(submission => {
+                const date = new Date(submission.timestamp);
+                const formattedDate = date.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                return `
+                    <div class="submission-card ${!submission.read ? 'unread' : ''}" data-id="${submission.id}">
+                        <div class="submission-header">
+                            <div class="submission-info">
+                                <h3>${escapeHtml(submission.name)}</h3>
+                                <p>${escapeHtml(submission.email)}</p>
+                            </div>
+                            <div class="submission-actions">
+                                ${!submission.read ? `<button class="action-btn mark-read-btn" onclick="markAsRead('${submission.id}')">Mark as Read</button>` : ''}
+                                <button class="action-btn delete-btn" onclick="deleteSubmission('${submission.id}')">Delete</button>
+                            </div>
+                        </div>
+                        <div class="submission-subject">${escapeHtml(submission.subject)}</div>
+                        <div class="submission-message">${escapeHtml(submission.message)}</div>
+                        <div class="submission-timestamp">${formattedDate}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats(submissions) {
+            const total = submissions.length;
+            const unread = submissions.filter(s => !s.read).length;
+            const today = submissions.filter(s => {
+                const subDate = new Date(s.timestamp);
+                const todayDate = new Date();
+                return subDate.toDateString() === todayDate.toDateString();
+            }).length;
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('unreadCount').textContent = unread;
+            document.getElementById('todayCount').textContent = today;
+        }
+
+        async function markAsRead(id) {
+            try {
+                const response = await fetch(`${API_URL}/api/submissions/${id}/read`, {
+                    method: 'PUT'
+                });
+
+                if (response.ok) {
+                    loadSubmissions();
+                }
+            } catch (error) {
+                console.error('Error marking as read:', error);
+            }
+        }
+
+        async function deleteSubmission(id) {
+            if (!confirm('Are you sure you want to delete this submission?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/submissions/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadSubmissions();
+                }
+            } catch (error) {
+                console.error('Error deleting submission:', error);
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load submissions on page load
+        loadSubmissions();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadSubmissions, 30000);
+    </script>
+</body>
+</html>
