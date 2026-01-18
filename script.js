@@ -257,9 +257,16 @@ if (contactForm) {
 
         try {
             // Send form data to API endpoint
-            const apiUrl = window.location.origin === 'file://' 
-                ? 'http://localhost:3000/api/contact' 
-                : '/api/contact';
+            // Use localhost for local development, otherwise use relative URL
+            let apiUrl;
+            if (window.location.origin === 'file://' || 
+                window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1') {
+                apiUrl = 'http://localhost:3000/api/contact';
+            } else {
+                // Vercel deployment - uses serverless function
+                apiUrl = '/api/contact';
+            }
             
             const response = await fetch(apiUrl, {
                 method: 'POST',
